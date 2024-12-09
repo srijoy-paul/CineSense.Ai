@@ -31,3 +31,7 @@
   - At least one digit (\d)
   - At least one special character ([@$!%*?&])
   - Minimum length of 8 characters
+
+### Firebase setup
+- Firebase hosting
+- create signup user in firebase
