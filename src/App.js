@@ -1,9 +1,9 @@
-
+import Body from "./components/Body";
 
 function App() {
   return (
-    <div className="">
-
+    <div className="h-screen w-full">
+      <Body />
     </div>
   );
 }
