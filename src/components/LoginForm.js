@@ -1,10 +1,15 @@
 import React, { useRef, useState } from 'react'
 import { validateLoginForm } from '../utils/validateLoginForm';
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../utils/firebase"
+import { useNavigate } from 'react-router-dom';
 
 
 function LoginForm() {
     const [isLogInForm, setIsLogInForm] = useState(true);
     const [errMessage, setErrMessage] = useState(null);
+
+    const navigate = useNavigate();
 
     const emailRef = useRef(null);
     const passwordRef = useRef(null);
@@ -16,6 +21,7 @@ function LoginForm() {
         const password = passwordRef.current.value;
         console.log(password);
 
+        //validate function call
         const result = validateLoginForm(email, password);
         console.log(result);
         setErrMessage(result.mssg);
@@ -23,8 +29,20 @@ function LoginForm() {
         //signin logic
         if (isLogInForm) {
             //login logic
+            signInWithEmailAndPassword(auth, email, password).then((userCreds) => {
+                console.log("User credentials after sign in ", userCreds);
+                navigate("/");
+            }).catch((err) => {
+                setErrMessage(err.code + " " + err.message);
+            })
         } else {
             //signup logic
+            createUserWithEmailAndPassword(auth, email, password).then((userCreds) => {
+                console.log("User credentials after sign up ", userCreds);
+                navigate("/")
+            }).catch((err) => {
+                setErrMessage(err.code + " " + err.message);
+            })
         }
 
 

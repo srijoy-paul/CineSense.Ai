@@ -4,6 +4,7 @@
 - Login/signup page
   - Sign in/ sign up form
     - Form Validation
+    - setup redux store
   - redirect to Browse page
 - Browse page (after authentication)
   - Header
