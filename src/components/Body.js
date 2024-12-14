@@ -19,22 +19,6 @@ function Body() {
         }
     ]);
 
-    useEffect(() => {
-        onAuthStateChanged(auth, (user) => {
-            //signin or signup
-            const { uid, email, displayName } = user;
-            if (user) {
-                dispatch(addUser({
-                    uid,
-                    email,
-                    displayName
-                }));
-            } else {
-                // logout
-                dispatch(removeUser());
-            }
-        })
-    })
     return (
         <>
             <RouterProvider router={router} />

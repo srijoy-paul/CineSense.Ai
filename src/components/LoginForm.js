@@ -1,15 +1,17 @@
 import React, { useRef, useState } from 'react'
 import { validateLoginForm } from '../utils/validateLoginForm';
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth } from "../utils/firebase"
-import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { addUser } from '../utils/userSlice';
 
 
 function LoginForm() {
     const [isLogInForm, setIsLogInForm] = useState(true);
     const [errMessage, setErrMessage] = useState(null);
 
-    const navigate = useNavigate();
+
+    const dispatch = useDispatch();
 
     const emailRef = useRef(null);
     const passwordRef = useRef(null);
@@ -31,7 +33,13 @@ function LoginForm() {
             //login logic
             signInWithEmailAndPassword(auth, email, password).then((userCreds) => {
                 console.log("User credentials after sign in ", userCreds);
-                navigate("/");
+                updateProfile(userCreds.user, {
+                    displayName: nameRef.current.value
+                }).then(() => {
+                    const { uid, email, displayName } = auth.currentUser;
+                    dispatch(addUser({ uid, email, displayName }));
+                })
+                // navigate("/");
             }).catch((err) => {
                 setErrMessage(err.code + " " + err.message);
             })
@@ -39,7 +47,8 @@ function LoginForm() {
             //signup logic
             createUserWithEmailAndPassword(auth, email, password).then((userCreds) => {
                 console.log("User credentials after sign up ", userCreds);
-                navigate("/")
+                // updateProfile()
+                // navigate("/")
             }).catch((err) => {
                 setErrMessage(err.code + " " + err.message);
             })
